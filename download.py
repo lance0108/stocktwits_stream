@@ -21,8 +21,11 @@ def download_month(
     session.auth = (USER, PASSWORD)
 
     url = f"https://firestream.stocktwits.com/backups/{data_type}/{year}/{month}"
-    response = session.get(url, stream=True)
-
+    try:
+        response = session.get(url, stream=True)
+    except requests.exceptions.HTTPError as e:
+        print(e)
+        return
     file_name = f"stocktwits_{data_type}_{year}_{month}.gz"
     out_path = os.path.join(out_dir, file_name)
     with open(out_path, "wb") as out_f:
@@ -30,7 +33,8 @@ def download_month(
         for i, chunk in enumerate(response.iter_content(chunk_size=8192)):
             if chunk:
                 out_f.write(chunk)
-                print("Chunks written:", (i + 1))
+                if i % 100 == 0:
+                    print("Chunks written:", (i + 1))
 
 
 if __name__ == "__main__":
@@ -41,8 +45,6 @@ if __name__ == "__main__":
         for month in months:
             for data_type in ("message", "activity"):
                 print(data_type, year, month)
-                try:
-                    download_month(data_type, year, month, out_dir)
-                except requests.exceptions.HTTPError as e:
-                    print(e)
+                download_month(data_type, year, month, out_dir)
+
 
