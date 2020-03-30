@@ -33,7 +33,7 @@ def download_month(
         for i, chunk in enumerate(response.iter_content(chunk_size=8192)):
             if chunk:
                 out_f.write(chunk)
-                if i % 100 == 0:
+                if i % 1000 == 0:
                     print("Chunks written:", (i + 1))
 
 
