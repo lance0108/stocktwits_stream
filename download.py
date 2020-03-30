@@ -20,7 +20,7 @@ def download_month(
     session = requests.Session()
     session.auth = (USER, PASSWORD)
 
-    url = f"https://firestream.stocktwits.com/backups/activity/{year}/{month}"
+    url = f"https://firestream.stocktwits.com/backups/{data_type}/{year}/{month}"
     response = session.get(url, stream=True)
 
     file_name = f"stocktwits_{data_type}_{year}_{month}.gz"
