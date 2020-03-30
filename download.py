@@ -41,4 +41,8 @@ if __name__ == "__main__":
         for month in months:
             for data_type in ("message", "activity"):
                 print(data_type, year, month)
-                download_month(data_type, year, month, out_dir)
+                try:
+                    download_month(data_type, year, month, out_dir)
+                except requests.exceptions.HTTPError as e:
+                    print(e)
+
